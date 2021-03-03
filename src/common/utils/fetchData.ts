@@ -13,6 +13,14 @@ const handleError = (res: Response) => {
   return res
 }
 
+const handleTooManyRequest = (res: Response) => {
+  if (res.status === 429) {
+    // ToDo store too many request info & block sendig new requests for 1min
+    throw new Error(res.statusText)
+  }
+  return res
+}
+
 export const fetchData = <T>(
   endpoint: string,
   options = {} as Options,
@@ -23,4 +31,5 @@ export const fetchData = <T>(
     body: JSON.stringify(options.body),
   })
     .then(handleError)
+    .then(handleTooManyRequest)
     .then((res) => res.json())
