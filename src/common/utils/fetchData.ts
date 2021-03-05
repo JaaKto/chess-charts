@@ -13,18 +13,29 @@ const handleError = (res: Response) => {
   return res
 }
 
+const addMinutes = (date: Date, minutes: number): Date => {
+  return new Date(date.getTime() + minutes * 60000)
+}
+
 const handleTooManyRequest = (res: Response) => {
   if (res.status === 429) {
-    // ToDo store too many request info & block sendig new requests for 1min
+    const requestTime = addMinutes(new Date(), 1).toDateString()
+    localStorage.setItem("block-request-time", requestTime)
     throw new Error(res.statusText)
   }
+  localStorage.removeItem("block-request-time")
   return res
+}
+const isRequestBlock = (): boolean => {
+  const blockRequestTime = localStorage.getItem("block-request-time") || ""
+  return new Date().getTime() - new Date(blockRequestTime).getTime() > 0
 }
 
 export const fetchData = <T>(
   endpoint: string,
   options = {} as Options,
-): Promise<T> =>
+): boolean | Promise<T> =>
+  !isRequestBlock &&
   fetch(endpoint, {
     method: options.method || "GET",
     headers: options.headers,
