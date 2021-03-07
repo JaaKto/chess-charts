@@ -1,5 +1,8 @@
 import React from "react"
+import HomePage from "./HomePage/HomePage"
 
-const App = (): JSX.Element => <div>Chess Charts</div>
+const App: React.FC = () => {
+  return <HomePage />
+}
 
 export default App
