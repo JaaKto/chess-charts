@@ -3,11 +3,22 @@ import styled from "styled-components"
 export const HomePage = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #4f7551;
+  background: #161512 linear-gradient(to bottom, #2e2a24, #161512 116px)
+    no-repeat;
+`
+export const HeaderContainer = styled.div`
+  height: 60px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  margin-left: 50px;
+`
+export const HeaderText = styled.h1`
+  color: #bababa;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
 `
 export const ChessPiece = styled.img`
-  max-width: 30vh;
+  height: 100%;
+  opacity: 0.3;
 `
