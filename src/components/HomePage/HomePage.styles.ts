@@ -22,3 +22,6 @@ export const ChessPiece = styled.img`
   height: 100%;
   opacity: 0.3;
 `
+export const MainContainer = styled.div`
+  margin: 30px 50px;
+`
