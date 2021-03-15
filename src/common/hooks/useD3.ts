@@ -1,5 +1,5 @@
 import React, { RefObject, useRef } from "react"
-import { select, Selection } from "d3"
+import { select, Selection } from "d3-selection"
 
 export const useD3 = (
   renderChartFn: (
