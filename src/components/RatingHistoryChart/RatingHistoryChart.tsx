@@ -6,6 +6,7 @@ import { axisLeft, axisBottom } from "d3-axis"
 import "d3-transition"
 import { easeElastic } from "d3-ease"
 import { useD3 } from "common/hooks"
+import { fetchData } from "common/utils"
 
 /* eslint-disable */
 
@@ -103,7 +104,13 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
 
       const rects = selection.selectAll("rect").data(data)
 
-      rects.exit().remove()
+      rects
+        .exit()
+        .transition()
+        .duration(300)
+        .attr("y", dimentions.height)
+        .attr("height", dimentions.chartHeight)
+        .remove()
 
       rects
         .transition()
@@ -112,6 +119,7 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
         .attr("x", (d) => x(d.name)!)
         .attr("y", (d) => y(d.number))
         .attr("width", x.bandwidth)
+        .delay(100)
         .attr("height", (d) => dimentions.chartHeight - y(d.number))
         .attr("fill", "orange")
 
@@ -126,7 +134,7 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
         .attr("fill", "orange")
         .transition()
         .duration(500)
-        .delay(200)
+        .delay(250)
         .ease(easeElastic)
         .attr("y", (d) => y(d.number))
         .attr("height", (d) => dimentions.chartHeight - y(d.number))
@@ -134,6 +142,9 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
   }, [data])
 
   const addRandom = () => {
+    fetchData("https://lichess.org/api/user/diewespe").then((data: any) =>
+      console.log(data),
+    )
     const dataToBeAdded = {
       name: `${Math.random()}`,
       number: Math.floor(Math.random() * 7000) + 1000,
