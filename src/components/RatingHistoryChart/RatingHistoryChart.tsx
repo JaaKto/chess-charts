@@ -6,7 +6,6 @@ import { axisLeft, axisBottom } from "d3-axis"
 import "d3-transition"
 import { easeElastic } from "d3-ease"
 import { useD3 } from "common/hooks"
-import { fetchData } from "common/utils"
 
 /* eslint-disable */
 
@@ -142,9 +141,6 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
   }, [data])
 
   const addRandom = () => {
-    fetchData("https://lichess.org/api/user/diewespe").then((data: any) =>
-      console.log(data),
-    )
     const dataToBeAdded = {
       name: `${Math.random()}`,
       number: Math.floor(Math.random() * 7000) + 1000,
