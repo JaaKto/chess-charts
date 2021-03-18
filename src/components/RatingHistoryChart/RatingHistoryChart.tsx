@@ -1,27 +1,34 @@
 import React, { FC, useRef, useState, useEffect } from "react"
 import { select, Selection } from "d3-selection"
-import { scaleLinear, scaleBand } from "d3-scale"
-import { max } from "d3-array"
+import { scaleLinear, scaleBand, scaleTime } from "d3-scale"
+import { max, min } from "d3-array"
 import { axisLeft, axisBottom } from "d3-axis"
 import "d3-transition"
 import { easeElastic } from "d3-ease"
 import { useD3 } from "common/hooks"
+import { fakeData } from "./fake-data"
 
 /* eslint-disable */
+interface PlayerStats {
+  name: string
+  points: Points[]
+}
 
-const initialData = [
-  { name: "foo", number: 9000 },
-  { name: "foo2", number: 2345 },
-  { name: "foo3", number: 5555 },
-  { name: "foo4", number: 1111 },
-  { name: "foo5", number: 6666 },
-  { name: "foo6", number: 8888 },
-]
+type Points = number[]
+
+const parsePoints = ([y, m, d, p]: Points) => {
+  return { date: new Date(`${y}-${m}-${d}`), points: p }
+}
+
+const parseData = (data: PlayerStats[]) => {
+  const { name, points } = data[0]
+  return { name: name, points: points.map((item) => parsePoints(item)) }
+}
 
 const dimentions = {
-  width: 800,
+  width: 1000,
   height: 600,
-  chartWidth: 700,
+  chartWidth: 900,
   chartHeight: 400,
   marginLeft: 100,
 }
@@ -34,18 +41,19 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
     null,
     undefined
   >>(null)
-  const [data, setData] = useState(initialData)
+  const [data, setData] = useState(parseData(fakeData).points)
 
-  const maxValue = max(data, (d) => d.number)
+  const maxValue = max(data, (d) => d.points)
+  const minValue = min(data, (d) => d.points)
+
   let y = scaleLinear()
-    .domain([0, maxValue!])
+    .domain([minValue!, maxValue!])
     .range([dimentions.chartHeight, 0])
 
-  let x = scaleBand()
-    .domain(data.map((d) => d.name))
-    .range([0, dimentions.chartWidth])
-    .padding(0.05)
-    .paddingInner(0.2)
+  let x = scaleTime()
+    .domain(data.map((d) => d.date))
+    .domain([data[0].date, data[data.length - 1].date])
+    .rangeRound([0, dimentions.chartWidth])
 
   const yAxis = axisLeft(y)
     .ticks(3)
@@ -76,77 +84,77 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
         .append("rect")
         .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
         .attr("fill", "orange")
-        .attr("x", (d) => x(d.name)!)
+        .attr("x", (d) => x(new Date(d.date))!)
         .attr("y", dimentions.chartHeight)
-        .attr("width", x.bandwidth)
+        .attr("width", 1)
         .attr("height", 0)
         .transition()
-        .duration(500)
-        .delay((_, i) => i * 100)
+        .duration(750)
+        .delay(100)
         .ease(easeElastic)
-        .attr("y", (d) => y(d.number))
-        .attr("height", (d) => dimentions.chartHeight - y(d.number))
+        .attr("y", (d) => y(d.points))
+        .attr("height", (d) => dimentions.chartHeight - y(d.points))
     }
   }, [selection])
 
-  useEffect(() => {
-    if (selection) {
-      y = scaleLinear()
-        .domain([0, maxValue!])
-        .range([dimentions.chartHeight, 0])
+  // useEffect(() => {
+  //   if (selection) {
+  //     y = scaleLinear()
+  //       .domain([0, maxValue!])
+  //       .range([dimentions.chartHeight, 0])
 
-      x = scaleBand()
-        .domain(data.map((d) => d.name))
-        .range([0, dimentions.chartWidth])
-        .padding(0.05)
-        .paddingInner(0.2)
+  //     x = scaleTime()
+  //       .domain(data.map((d) => d.date))
+  //       .range([0, dimentions.chartWidth])
+  //     // .padding(0.05)
+  //     // .paddingInner(0.2)
 
-      const rects = selection.selectAll("rect").data(data)
+  //     const rects = selection.selectAll("rect").data(data)
 
-      rects
-        .exit()
-        .transition()
-        .duration(300)
-        .attr("y", dimentions.height)
-        .attr("height", dimentions.chartHeight)
-        .remove()
+  //     rects
+  //       .exit()
+  //       .transition()
+  //       .duration(300)
+  //       .attr("y", dimentions.height)
+  //       .attr("height", dimentions.chartHeight)
+  //       .remove()
 
-      rects
-        .transition()
-        .duration(300)
-        .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
-        .attr("x", (d) => x(d.name)!)
-        .attr("y", (d) => y(d.number))
-        .attr("width", x.bandwidth)
-        .delay(100)
-        .attr("height", (d) => dimentions.chartHeight - y(d.number))
-        .attr("fill", "orange")
+  //     rects
+  //       .transition()
+  //       .duration(300)
+  //       .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
+  //       .attr("x", (d) => x(d.date)!)
+  //       .attr("y", (d) => y(d.points))
+  //       // .attr("width", x.bandwidth)
+  //       .delay(100)
+  //       .attr("height", (d) => dimentions.chartHeight - y(d.points))
+  //       .attr("fill", "orange")
 
-      rects
-        .enter()
-        .append("rect")
-        .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
-        .attr("x", (d) => x(d.name)!)
-        .attr("y", dimentions.chartHeight)
-        .attr("width", x.bandwidth)
-        .attr("height", 0)
-        .attr("fill", "orange")
-        .transition()
-        .duration(500)
-        .delay(250)
-        .ease(easeElastic)
-        .attr("y", (d) => y(d.number))
-        .attr("height", (d) => dimentions.chartHeight - y(d.number))
-    }
-  }, [data])
+  //     rects
+  //       .enter()
+  //       .append("rect")
+  //       .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
+  //       .attr("x", (d) => x(d.date)!)
+  //       .attr("y", dimentions.chartHeight)
+  //       // .attr("width", x.bandwidth)
+  //       .attr("height", 0)
+  //       .attr("fill", "orange")
+  //       .transition()
+  //       .duration(500)
+  //       .delay(250)
+  //       .ease(easeElastic)
+  //       .attr("y", (d) => y(d.points))
+  //       .attr("height", (d) => dimentions.chartHeight - y(d.points))
+  //   }
+  // }, [data])
 
-  const addRandom = () => {
-    const dataToBeAdded = {
-      name: `${Math.random()}`,
-      number: Math.floor(Math.random() * 7000) + 1000,
-    }
-    setData([...data, dataToBeAdded])
-  }
+  // const addRandom = () => {
+  //   const dataToBeAdded = {
+  //     name: `${Math.random()}`,
+  //     number: Math.floor(Math.random() * 7000) + 1000,
+  //   }
+  //   setData([...data, dataToBeAdded])
+  // }
 
   const removeLast = () => {
     if (data.length === 0) {
@@ -164,7 +172,7 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
         width={dimentions.width}
         height={dimentions.height}
       ></svg>
-      <button onClick={addRandom}>Add random</button>
+      {/* <button onClick={addRandom}>Add random</button> */}
       <button onClick={removeLast}>Remove last</button>
     </div>
   )
