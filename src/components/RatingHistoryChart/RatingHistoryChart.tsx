@@ -1,12 +1,11 @@
 import React, { FC, useRef, useState, useEffect } from "react"
 import { select, Selection } from "d3-selection"
-import { scaleLinear, scaleBand, scaleTime } from "d3-scale"
+import { scaleLinear, scaleTime } from "d3-scale"
 import { max, min } from "d3-array"
 import { axisLeft, axisBottom } from "d3-axis"
-import "d3-transition"
-import { easeElastic } from "d3-ease"
 import { useD3 } from "common/hooks"
 import { fakeData } from "./fake-data"
+import * as d3 from "d3"
 
 /* eslint-disable */
 interface PlayerStats {
@@ -27,7 +26,7 @@ const parseData = (data: PlayerStats[]) => {
 
 const dimentions = {
   width: 1000,
-  height: 600,
+  height: 450,
   chartWidth: 900,
   chartHeight: 400,
   marginLeft: 100,
@@ -46,11 +45,11 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
   const maxValue = max(data, (d) => d.points)
   const minValue = min(data, (d) => d.points)
 
-  let y = scaleLinear()
-    .domain([minValue!, maxValue!])
+  const y = scaleLinear()
+    .domain([minValue! - 75, maxValue! + 75])
     .range([dimentions.chartHeight, 0])
 
-  let x = scaleTime()
+  const x = scaleTime()
     .domain(data.map((d) => d.date))
     .domain([data[0].date, data[data.length - 1].date])
     .rangeRound([0, dimentions.chartWidth])
@@ -59,6 +58,29 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
     .ticks(3)
     .tickFormat((d) => `${d} units`)
   const xAxis = axisBottom(x)
+
+  const line = d3
+    .line()
+    .x((d) => d[0])
+    .y((d) => d[1])
+    .curve(d3.curveCatmullRom)
+
+  const area = d3
+    .area()
+    .x((d) => d[0])
+    .y0(dimentions.chartHeight)
+    .y1((d) => d[1])
+    .curve(d3.curveCatmullRom)
+
+  const points: [number, number][] = data.map((d) => [
+    x(new Date(d.date)),
+    y(d.points),
+  ])
+
+  const points1: [number, number][] = data.map((d) => [
+    x(new Date(d.date)),
+    dimentions.chartHeight,
+  ])
 
   useEffect(() => {
     if (!selection) {
@@ -78,91 +100,29 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
 
       selection
         .append("g")
-        .selectAll("rect")
-        .data(data)
-        .enter()
-        .append("rect")
+        .append("path")
+        .attr("id", "line")
+        .style("fill", "none")
+        .style("stroke", "orange")
+        .style("stroke-width", "2px")
         .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
-        .attr("fill", "orange")
-        .attr("x", (d) => x(new Date(d.date))!)
-        .attr("y", dimentions.chartHeight)
-        .attr("width", 1)
-        .attr("height", 0)
+        .attr("d", line(points1)!)
         .transition()
         .duration(750)
-        .delay(100)
-        .ease(easeElastic)
-        .attr("y", (d) => y(d.points))
-        .attr("height", (d) => dimentions.chartHeight - y(d.points))
+        .attr("d", line(points)!)
+
+      selection
+        .append("g")
+        .append("path")
+        .attr("id", "area")
+        .style("fill", "#ffa5004d")
+        .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
+        .attr("d", area(points1)!)
+        .transition()
+        .duration(750)
+        .attr("d", area(points)!)
     }
-  }, [selection])
-
-  // useEffect(() => {
-  //   if (selection) {
-  //     y = scaleLinear()
-  //       .domain([0, maxValue!])
-  //       .range([dimentions.chartHeight, 0])
-
-  //     x = scaleTime()
-  //       .domain(data.map((d) => d.date))
-  //       .range([0, dimentions.chartWidth])
-  //     // .padding(0.05)
-  //     // .paddingInner(0.2)
-
-  //     const rects = selection.selectAll("rect").data(data)
-
-  //     rects
-  //       .exit()
-  //       .transition()
-  //       .duration(300)
-  //       .attr("y", dimentions.height)
-  //       .attr("height", dimentions.chartHeight)
-  //       .remove()
-
-  //     rects
-  //       .transition()
-  //       .duration(300)
-  //       .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
-  //       .attr("x", (d) => x(d.date)!)
-  //       .attr("y", (d) => y(d.points))
-  //       // .attr("width", x.bandwidth)
-  //       .delay(100)
-  //       .attr("height", (d) => dimentions.chartHeight - y(d.points))
-  //       .attr("fill", "orange")
-
-  //     rects
-  //       .enter()
-  //       .append("rect")
-  //       .attr("transform", `translate(${dimentions.marginLeft}, 0)`)
-  //       .attr("x", (d) => x(d.date)!)
-  //       .attr("y", dimentions.chartHeight)
-  //       // .attr("width", x.bandwidth)
-  //       .attr("height", 0)
-  //       .attr("fill", "orange")
-  //       .transition()
-  //       .duration(500)
-  //       .delay(250)
-  //       .ease(easeElastic)
-  //       .attr("y", (d) => y(d.points))
-  //       .attr("height", (d) => dimentions.chartHeight - y(d.points))
-  //   }
-  // }, [data])
-
-  // const addRandom = () => {
-  //   const dataToBeAdded = {
-  //     name: `${Math.random()}`,
-  //     number: Math.floor(Math.random() * 7000) + 1000,
-  //   }
-  //   setData([...data, dataToBeAdded])
-  // }
-
-  const removeLast = () => {
-    if (data.length === 0) {
-      return
-    }
-    const slicedData = data.slice(0, data.length - 1)
-    setData(slicedData)
-  }
+  }, [selection, data])
 
   return (
     <div>
@@ -172,8 +132,6 @@ export const RatingHistoryChart: FC = (): JSX.Element => {
         width={dimentions.width}
         height={dimentions.height}
       ></svg>
-      {/* <button onClick={addRandom}>Add random</button> */}
-      <button onClick={removeLast}>Remove last</button>
     </div>
   )
 }
