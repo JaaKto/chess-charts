@@ -1,5 +1,9 @@
 import styled from "styled-components"
 
+export const SearchWrapper = styled.div`
+  display: flex;
+`
+
 export const Input = styled.input`
   font-family: "Roboto", sans-serif;
   background-color: rgba(0, 0, 0, 0);
@@ -11,4 +15,16 @@ export const Input = styled.input`
   &:focus {
     outline: none;
   }
+`
+export const Button = styled.button`
+  font-family: "Roboto", sans-serif;
+  background-color: #bababa;
+  color: #161512;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 10px 20px;
+  outline: none;
+  margin-left: 2px;
+  cursor: pointer;
 `
