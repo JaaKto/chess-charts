@@ -1,0 +1,1 @@
+export { RatingHistoryChart } from "./RatingHistoryChart"

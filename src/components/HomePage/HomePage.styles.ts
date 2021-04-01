@@ -22,6 +22,13 @@ export const ChessPiece = styled.img`
   height: 100%;
   opacity: 0.3;
 `
-export const MainContainer = styled.div`
-  margin: 30px 50px;
+
+export const MainWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 30px auto;
+  justify-content: center;
+  color: #bababa;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
 `
