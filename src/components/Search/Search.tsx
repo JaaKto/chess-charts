@@ -5,7 +5,7 @@ import { fetchData } from "common/utils"
 import { Player } from "./types"
 
 export const Search: React.FC = () => {
-  const [result, setResult] = useState<Player[]>([])
+  const [result, setResult] = useState<Player[] | unknown>([])
   const [value, setValue] = useState<string>("")
   const url = `${process.env.REACT_APP_API}`
 
@@ -17,7 +17,7 @@ export const Search: React.FC = () => {
     event.preventDefault()
     console.log(value)
     fetchData(`${url}/user/${value}`)
-      .then((response: any) => {
+      .then((response: Player | unknown) => {
         console.log(response)
         setResult(response)
         setValue("")
