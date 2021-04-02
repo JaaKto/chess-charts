@@ -4,8 +4,11 @@ import * as S from "./Search.styles"
 import { fetchData } from "common/utils"
 import { Player } from "./types"
 
-export const Search: React.FC = () => {
-  const [result, setResult] = useState<Player[] | unknown>([])
+type PlayerProps = {
+  setPlayers: React.Dispatch<React.SetStateAction<Player | unknown>>
+}
+
+export const Search = ({ setPlayers }: PlayerProps) => {
   const [value, setValue] = useState<string>("")
   const url = `${process.env.REACT_APP_API}`
 
@@ -15,11 +18,10 @@ export const Search: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log(value)
     fetchData(`${url}/user/${value}`)
       .then((response: Player | unknown) => {
         console.log(response)
-        setResult(response)
+        setPlayers(response)
         setValue("")
       })
       .catch((err) => console.error(err))
