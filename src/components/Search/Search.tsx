@@ -13,7 +13,8 @@ export const Search: React.FC = () => {
     setValue(event.target.value)
   }
 
-  const handleClick = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     console.log(value)
     fetchData(`${url}/user/${value}`)
       .then((response: any) => {
@@ -27,8 +28,10 @@ export const Search: React.FC = () => {
   return (
     <div>
       <S.SearchWrapper>
-        <S.Input value={value} onChange={handleChange} type="text"></S.Input>
-        <S.Button onClick={handleClick}>Search</S.Button>
+        <S.Form onSubmit={handleSubmit}>
+          <S.Input value={value} onChange={handleChange} type="text"></S.Input>
+          <S.Button>Search</S.Button>
+        </S.Form>
       </S.SearchWrapper>
     </div>
   )

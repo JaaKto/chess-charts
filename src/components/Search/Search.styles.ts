@@ -5,6 +5,11 @@ export const SearchWrapper = styled.div`
   margin: 30px 50px 50px 50px;
 `
 
+export const Form = styled.form`
+  display: flex;
+  width: 100%;
+`
+
 export const Input = styled.input`
   font-family: "Roboto", sans-serif;
   background-color: rgba(0, 0, 0, 0);
