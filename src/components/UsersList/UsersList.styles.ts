@@ -16,10 +16,15 @@ export const ListItem = styled.li`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 5px;
 `
 export const Button = styled.button`
   border: none;
   background: none;
   color: #bababa;
   padding: 0 0 0 5px;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
 `
