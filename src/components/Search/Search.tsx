@@ -21,13 +21,9 @@ export const Search = ({ players, setPlayers, setError }: PlayerProps) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     fetchData(`${url}/user/${value}`)
-      .then((response: Player) => {
-        console.log(response)
-        // players => setPlayers([...players, response])
-        if (response) {
-          setPlayers([...players, response])
-          setValue("")
-        }
+      .then((response: any) => {
+        setPlayers([...players, response])
+        setValue("")
       })
       .catch((err) => setError(err))
   }

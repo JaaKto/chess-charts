@@ -3,13 +3,26 @@ import React from "react"
 import { useState, ChangeEvent } from "react"
 import * as S from "./UsersList.styles"
 
-export const UsersList = ({ players }: { players: Player[] }) => {
+type PlayerProps = {
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+  players: Player[]
+}
+
+export const UsersList = ({ players, setPlayers }: PlayerProps) => {
+  const handleClick = (chosenPlayer: Player) => {
+    const filteredPlayers = players.filter(
+      (player) => player.id !== chosenPlayer.id,
+    )
+    setPlayers(filteredPlayers)
+  }
+
   return (
     <div>
       <S.List>
-        {players.map(({ player }) => (
+        {players.map((player: Player) => (
           <S.ListItem key={player.id}>
-            {player.username} <S.Button>✖</S.Button>
+            {player.username}{" "}
+            <S.Button onClick={() => handleClick(player)}>✖</S.Button>
           </S.ListItem>
         ))}
       </S.List>

@@ -21,7 +21,7 @@ export const HomePage: React.FC = () => {
       </S.HeaderContainer>
 
       <Search {...{ players, setPlayers, setError }} />
-      <UsersList players={players} />
+      <UsersList {...{ players, setPlayers }} />
 
       <S.MainWrapper>
         <RatingHistoryChart points={points} />
