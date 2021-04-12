@@ -1,14 +1,14 @@
 import { Player } from "components/Search/types"
 import React from "react"
 import { useState, ChangeEvent } from "react"
-import * as S from "./UsersList.styles"
+import * as S from "./PlayersList.styles"
 
 type PlayerProps = {
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
   players: Player[]
 }
 
-export const UsersList = ({ players, setPlayers }: PlayerProps) => {
+export const PlayersList = ({ players, setPlayers }: PlayerProps) => {
   const handleClick = (chosenPlayer: Player) => {
     const filteredPlayers = players.filter(
       (player) => player.id !== chosenPlayer.id,

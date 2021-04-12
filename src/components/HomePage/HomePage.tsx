@@ -6,7 +6,7 @@ import { RatingHistoryChart } from "components/RatingHistoryChart"
 import { fakeData } from "./"
 import { parsePoints } from "common/utils"
 import { Player } from "components/Search/types"
-import { UsersList } from "components/UsersList"
+import { PlayersList } from "components/PlayersList"
 
 export const HomePage: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([])
@@ -21,7 +21,7 @@ export const HomePage: React.FC = () => {
       </S.HeaderContainer>
 
       <Search {...{ players, setPlayers, setError }} />
-      <UsersList {...{ players, setPlayers }} />
+      <PlayersList {...{ players, setPlayers }} />
 
       <S.MainWrapper>
         <RatingHistoryChart points={points} />
