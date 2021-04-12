@@ -5,10 +5,12 @@ import { fetchData } from "common/utils"
 import { Player } from "./types"
 
 type PlayerProps = {
-  setPlayers: React.Dispatch<React.SetStateAction<Player | unknown>>
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+  players: Player[]
 }
 
-export const Search = ({ setPlayers }: PlayerProps) => {
+export const Search = ({ players, setPlayers, setError }: PlayerProps) => {
   const [value, setValue] = useState<string>("")
   const url = `${process.env.REACT_APP_API}`
 
@@ -19,12 +21,15 @@ export const Search = ({ setPlayers }: PlayerProps) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     fetchData(`${url}/user/${value}`)
-      .then((response: Player | unknown) => {
+      .then((response: Player) => {
         console.log(response)
-        setPlayers(response)
-        setValue("")
+        // players => setPlayers([...players, response])
+        if (response) {
+          setPlayers([...players, response])
+          setValue("")
+        }
       })
-      .catch((err) => console.error(err))
+      .catch((err) => setError(err))
   }
 
   return (

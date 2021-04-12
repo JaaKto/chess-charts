@@ -25,9 +25,7 @@ const isRequestBlock: () => boolean = () =>
 
 export const fetchData = <T>(endpoint: string): Promise<T | string> => {
   if (isRequestBlock()) {
-    return new Promise<string>((resolve) => resolve("requestBloker")).then(
-      (res) => res,
-    )
+    return new Promise<string>((reject) => reject("requestBloker"))
   } else {
     return fetch(endpoint, { method: "GET" })
       .then(handleError)

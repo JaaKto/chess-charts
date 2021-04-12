@@ -1,14 +1,17 @@
+import { Player } from "components/Search/types"
 import React from "react"
 import { useState, ChangeEvent } from "react"
 import * as S from "./UsersList.styles"
 
-export const UsersList = () => {
+export const UsersList = ({ players }: { players: Player[] }) => {
   return (
     <div>
       <S.List>
-        <S.ListItem>
-          user <S.Button>✖</S.Button>
-        </S.ListItem>
+        {players.map(({ player }) => (
+          <S.ListItem key={player.id}>
+            {player.username} <S.Button>✖</S.Button>
+          </S.ListItem>
+        ))}
       </S.List>
     </div>
   )
