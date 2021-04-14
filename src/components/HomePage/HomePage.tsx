@@ -6,9 +6,11 @@ import { RatingHistoryChart } from "components/RatingHistoryChart"
 import { fakeData } from "./"
 import { parsePoints } from "common/utils"
 import { Player } from "components/Search/types"
+import { PlayersList } from "components/PlayersList"
 
 export const HomePage: React.FC = () => {
-  const [players, setPlayers] = useState<Player[] | unknown>([])
+  const [players, setPlayers] = useState<Player[]>([])
+  const [error, setError] = useState<string>()
   const points = fakeData[0].points.map((item) => parsePoints(item))
 
   return (
@@ -18,7 +20,8 @@ export const HomePage: React.FC = () => {
         <S.HeaderText>Chess-charts</S.HeaderText>
       </S.HeaderContainer>
 
-      <Search {...{ setPlayers }} />
+      <Search {...{ players, setPlayers, setError }} />
+      <PlayersList {...{ players, setPlayers }} />
 
       <S.MainWrapper>
         <RatingHistoryChart points={points} />
