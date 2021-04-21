@@ -23,7 +23,7 @@ export const ChessPiece = styled.img`
   opacity: 0.3;
 `
 
-export const MainWrapper = styled.div`
+export const MainContainer = styled.div`
   display: flex;
   align-items: center;
   margin: 30px auto;

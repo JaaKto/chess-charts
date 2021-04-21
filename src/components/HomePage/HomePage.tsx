@@ -19,13 +19,11 @@ export const HomePage: React.FC = () => {
         <S.ChessPiece src="../assets/chess.png" alt="chess-piece" />
         <S.HeaderText>Chess-charts</S.HeaderText>
       </S.HeaderContainer>
-
       <Search {...{ players, setPlayers, setError }} />
       <PlayersList {...{ players, setPlayers }} />
-
-      <S.MainWrapper>
+      <S.MainContainer>
         <RatingHistoryChart points={points} />
-      </S.MainWrapper>
+      </S.MainContainer>
     </S.HomePage>
   )
 }
