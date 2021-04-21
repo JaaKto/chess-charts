@@ -1,14 +1,15 @@
+import React, { Dispatch, SetStateAction } from "react"
 import { Player } from "components/Search/types"
-import React from "react"
-import { useState, ChangeEvent } from "react"
 import * as S from "./PlayersList.styles"
 
 type PlayerProps = {
-  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+  setPlayers: Dispatch<SetStateAction<Player[]>>
   players: Player[]
 }
-
-export const PlayersList = ({ players, setPlayers }: PlayerProps) => {
+export const PlayersList: React.FC<PlayerProps> = ({
+  players,
+  setPlayers,
+}: PlayerProps) => {
   const handleClick = (chosenPlayer: Player) => {
     const filteredPlayers = players.filter(
       (player) => player.id !== chosenPlayer.id,
@@ -21,7 +22,7 @@ export const PlayersList = ({ players, setPlayers }: PlayerProps) => {
       <S.List>
         {players.map((player: Player) => (
           <S.ListItem key={player.id}>
-            {player.username}{" "}
+            {player.username}
             <S.Button onClick={() => handleClick(player)}>✖</S.Button>
           </S.ListItem>
         ))}

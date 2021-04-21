@@ -1,6 +1,5 @@
 import React, {
   useState,
-  FC,
   ChangeEvent,
   FormEvent,
   Dispatch,
@@ -16,7 +15,7 @@ type PlayerProps = {
   setError: Dispatch<SetStateAction<string | undefined>>
 }
 
-export const Search: FC<PlayerProps> = ({
+export const Search: React.FC<PlayerProps> = ({
   players,
   setPlayers,
   setError,
@@ -30,19 +29,20 @@ export const Search: FC<PlayerProps> = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
-    fetchData(`${url}/user/${search}`)
-      .then((response) => {
-        setPlayers([...players, response] as Player[])
-        setSearch("")
-      })
-      .catch((err) => setError(err))
+    !!search &&
+      fetchData(`${url}/user/${search}`)
+        .then((response) => {
+          setPlayers([...players, response] as Player[])
+          setSearch("")
+        })
+        .catch((err) => setError(err))
   }
 
   return (
     <S.SearchContainer>
       <S.Form onSubmit={handleSubmit}>
         <S.Input value={search} onChange={handleChange} type="text"></S.Input>
-        <S.Button>Search</S.Button>
+        <S.Button type="submit">Search</S.Button>
       </S.Form>
     </S.SearchContainer>
   )
