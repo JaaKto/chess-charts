@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const SearchWrapper = styled.div`
+export const SearchContainer = styled.div`
   display: flex;
   margin: 30px 50px 10px 50px;
 `

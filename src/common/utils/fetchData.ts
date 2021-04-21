@@ -23,13 +23,13 @@ const isRequestBlock: () => boolean = () =>
   !!localStorage.getItem("block-request-time") &&
   new Date() < new Date(localStorage.getItem("block-request-time") || "")
 
-export const fetchData = <T>(endpoint: string): Promise<T | string> => {
-  if (isRequestBlock()) {
-    return new Promise<string>((reject) => reject("requestBloker"))
-  } else {
+export const fetchData = <T>(endpoint: string): Promise<T | string> =>
+  new Promise(async () => {
+    if (isRequestBlock()) {
+      throw new Error("Requests are blocked!")
+    }
     return fetch(endpoint, { method: "GET" })
       .then(handleError)
       .then(handleTooManyRequest)
       .then((res) => res.json())
-  }
-}
+  })
