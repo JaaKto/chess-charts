@@ -22,12 +22,16 @@ export const ChessPiece = styled.img`
   height: 100%;
   opacity: 0.3;
 `
-
 export const MainContainer = styled.div`
   display: flex;
   align-items: center;
   margin: 30px auto;
   justify-content: center;
+  color: #bababa;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+`
+export const ErrorText = styled.h1`
   color: #bababa;
   font-family: "Roboto", sans-serif;
   font-weight: 300;
