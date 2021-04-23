@@ -12,7 +12,7 @@ import { Player } from "./types"
 type PlayerProps = {
   players: Player[]
   setPlayers: Dispatch<SetStateAction<Player[]>>
-  setError: Dispatch<SetStateAction<string | undefined>>
+  setError: Dispatch<SetStateAction<boolean>>
 }
 
 export const Search: React.FC<PlayerProps> = ({
@@ -33,9 +33,9 @@ export const Search: React.FC<PlayerProps> = ({
       fetchData(`${url}/user/${search}`)
         .then((response) => {
           setPlayers([...players, response] as Player[])
-          setSearch("")
         })
-        .catch((err) => setError(err))
+        .catch(() => setError(true))
+        .finally(() => setSearch(""))
   }
 
   return (

@@ -9,7 +9,7 @@ import { PlayersList } from "components/PlayersList"
 
 export const HomePage: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([])
-  const [error, setError] = useState<string>()
+  const [error, setError] = useState<boolean>(false)
   const points = fakeData[0].points.map((item) => parsePoints(item))
 
   return (
@@ -20,7 +20,7 @@ export const HomePage: React.FC = () => {
       </S.HeaderContainer>
       <Search {...{ players, setPlayers, setError }} />
       <PlayersList {...{ players, setPlayers }} />
-      {error && <S.ErrorText>{error}</S.ErrorText>}
+      {error && <S.ErrorText>User not found</S.ErrorText>}
       <S.MainContainer>
         <RatingHistoryChart points={points} />
       </S.MainContainer>
