@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import * as S from "./HomePage.styles"
 import { Search } from "../Search"
+import { Snackbar } from "../Snackbar"
 import { RatingHistoryChart } from "components/RatingHistoryChart"
 import { fakeData } from "."
 import { parsePoints } from "common/utils"
@@ -11,6 +12,7 @@ export const HomePage: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([])
   const [error, setError] = useState<boolean>(false)
   const points = fakeData[0].points.map((item) => parsePoints(item))
+  const userNotFoundMessage = "User not found"
 
   return (
     <S.HomePage>
@@ -20,7 +22,7 @@ export const HomePage: React.FC = () => {
       </S.HeaderContainer>
       <Search {...{ players, setPlayers, setError }} />
       <PlayersList {...{ players, setPlayers }} />
-      {error && <S.ErrorText>User not found</S.ErrorText>}
+      <Snackbar message={userNotFoundMessage} {...{ error, setError }} />
       <S.MainContainer>
         <RatingHistoryChart points={points} />
       </S.MainContainer>
