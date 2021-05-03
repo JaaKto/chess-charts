@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 export const HomePage = styled.div`
+  font-family: "Roboto", sans-serif;
   width: 100%;
   height: 100vh;
   background: #161512 linear-gradient(to bottom, #2e2a24, #161512 116px)
@@ -15,7 +16,6 @@ export const HeaderContainer = styled.div`
 `
 export const HeaderText = styled.h1`
   color: #bababa;
-  font-family: "Roboto", sans-serif;
   font-weight: 300;
 `
 export const ChessPiece = styled.img`
@@ -28,11 +28,5 @@ export const MainContainer = styled.div`
   margin: 30px auto;
   justify-content: center;
   color: #bababa;
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-`
-export const ErrorText = styled.h1`
-  color: #bababa;
-  font-family: "Roboto", sans-serif;
   font-weight: 300;
 `
