@@ -1,7 +1,6 @@
 import styled from "styled-components"
 
 export const HomePage = styled.div`
-  font-family: "Roboto", sans-serif;
   width: 100%;
   height: 100vh;
   background: #161512 linear-gradient(to bottom, #2e2a24, #161512 116px)

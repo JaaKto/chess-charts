@@ -7,7 +7,6 @@ export const List = styled.ul`
   margin: 0;
 `
 export const ListItem = styled.li`
-  font-family: "Roboto", sans-serif;
   font-size: 20px;
   border: 2px solid #bf811d;
   border-radius: 5px;
