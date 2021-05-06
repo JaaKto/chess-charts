@@ -15,7 +15,6 @@ export const HeaderContainer = styled.div`
 `
 export const HeaderText = styled.h1`
   color: #bababa;
-  font-family: "Roboto", sans-serif;
   font-weight: 300;
 `
 export const ChessPiece = styled.img`
@@ -28,11 +27,5 @@ export const MainContainer = styled.div`
   margin: 30px auto;
   justify-content: center;
   color: #bababa;
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-`
-export const ErrorText = styled.h1`
-  color: #bababa;
-  font-family: "Roboto", sans-serif;
   font-weight: 300;
 `
